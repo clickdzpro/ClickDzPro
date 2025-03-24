@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Assistant Chatbot</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || 
+                              document.cookie.includes('isLoggedIn=true');
+            
+            if (!isLoggedIn) {
+                console.log("User not logged in, redirecting to login page");
+                window.location.href = 'login.html';
+            } else {
+                console.log("User is logged in, showing content");
+                // Show the main content
+                document.body.style.visibility = 'visible';
+                
+                // Display username if available
+                const username = localStorage.getItem('username') || 'User';
+                const usernameDisplay = document.getElementById('username-display');
+                if (usernameDisplay) {
+                    usernameDisplay.textContent = `Welcome, ${username}!`;
+                }
+            }
+        });
+    </script>
+    <style>
+        body {
+            visibility: hidden; /* Hide content until auth check completes */
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>Academic Assistant</h1>
+            <p>Ask me any academic question</p>
+            <div class="user-info">
+                <span id="username-display"></span>
+                <button id="logout-btn">Logout</button>
+            </div>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot-message">
+                <div class="message-content">
+                    Hello! I'm your academic assistant. I can help with questions across various academic disciplines. What would you like to know?
+                </div>
+            </div>
+        </div>
+        <div class="chat-input-container">
+            <textarea id="user-input" placeholder="Type your question here..." rows="2"></textarea>
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+    
+    <script>
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('username');
+            // Clear cookies too
+            document.cookie = "isLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.href = 'login.html';
+        });
+        
+        // Basic chat functionality
+        document.getElementById('send-btn').addEventListener('click', sendMessage);
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const message = userInput.value.trim();
+            
+            if (message) {
+                // Add user message to chat
+                addMessageToChat(message, 'user');
+                userInput.value = '';
+                
+                // Simulate bot response (replace with actual API call later)
+                setTimeout(() => {
+                    const responses = [
+                        "That's an interesting question. In academic contexts, this is often approached by examining multiple perspectives.",
+                        "Great question! Based on recent research, there are several theories about this topic.",
+                        "I'd be happy to help with that. This is a complex topic that spans several disciplines.",
+                        "From an academic standpoint, we should consider both theoretical and practical aspects of this question.",
+                        "Let me provide some scholarly context for this. There are several key concepts to understand first."
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addMessageToChat(randomResponse, 'bot');
+                }, 1000);
+            }
+        }
+        
+        function addMessageToChat(message, sender) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = message;
+            
+            messageDiv.appendChild(contentDiv);
+            chatMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+</body>
+</html>

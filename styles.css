@@ -170,3 +170,30 @@ pre {
 code {
     font-family: 'Courier New', Courier, monospace;
 }
+/* User info and logout button */
+.user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+#username-display {
+    color: white;
+}
+
+#logout-btn {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.2s;
+}
+
+#logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
