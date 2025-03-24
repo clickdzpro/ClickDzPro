@@ -45,6 +45,31 @@ function ensureFilesExist() {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academic Assistant Chatbot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || 
+                              document.cookie.includes('isLoggedIn=true');
+            
+            if (!isLoggedIn) {
+                console.log("User not logged in, redirecting to login page");
+                window.location.href = 'login.html';
+            } else {
+                console.log("User is logged in, showing content");
+                // Show the main content
+                document.body.style.visibility = 'visible';
+                
+                // Display username if available
+                const username = localStorage.getItem('username') || 'User';
+                const usernameDisplay = document.getElementById('username-display');
+                if (usernameDisplay) {
+                    usernameDisplay.textContent = \`Welcome, \${username}!\`;
+                }
+            }
+        });
+    </script>
     <style>
         * {
             margin: 0;
@@ -54,9 +79,43 @@ function ensureFilesExist() {
         }
         
         body {
+            visibility: hidden; /* Hide content until auth check completes */
             background-color: #f8f9fa;
             color: #202124;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .clickdz-banner {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+        
+        .clickdz-logo {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .clickdz-text {
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+        
+        .clickdz-text strong {
+            font-weight: 600;
+        }
+        
+        .main-content {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -208,6 +267,33 @@ function ensureFilesExist() {
             font-size: 20px;
         }
         
+        .whatsapp-support {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+            font-weight: 500;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-support:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .whatsapp-support i {
+            font-size: 20px;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 600px) {
             .chat-container {
@@ -219,56 +305,81 @@ function ensureFilesExist() {
             .message-content {
                 max-width: 85%;
             }
+            
+            .whatsapp-support {
+                bottom: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h1>Academic Assistant</h1>
-            <p>Ask me any academic question</p>
-            <div class="user-info">
-                <span id="username-display">Welcome, User!</span>
-                <button id="logout-btn">Logout</button>
-            </div>
+    <!-- Powered by ClickDzPro banner -->
+    <div class="clickdz-banner">
+        <div class="clickdz-logo">
+            <i class="fas fa-bolt"></i>
         </div>
-        <div class="chat-messages" id="chat-messages">
-            <div class="message bot-message">
-                <div class="message-content">
-                    Hello! I'm your academic assistant. I can help with questions across various academic disciplines. What would you like to know?
+        <div class="clickdz-text">Powered by <strong>ClickDzPro</strong></div>
+    </div>
+    
+    <div class="main-content">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>Academic Assistant</h1>
+                <p>Ask me any academic question</p>
+                <div class="user-info">
+                    <span id="username-display"></span>
+                    <button id="logout-btn">Logout</button>
                 </div>
             </div>
-        </div>
-        <div class="chat-input-container">
-            <textarea id="user-input" placeholder="Type your question here..." rows="2"></textarea>
-            <button id="send-btn">Send</button>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        Hello! I'm your academic assistant. I can help with questions across various academic disciplines. What would you like to know?
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <textarea id="user-input" placeholder="Type your question here..." rows="2"></textarea>
+                <button id="send-btn">Send</button>
+            </div>
         </div>
     </div>
     
+    <!-- WhatsApp Live Support -->
+    <a href="https://wa.me/213558794243" class="whatsapp-support" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+        <span>Live Support</span>
+    </a>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Chat functionality
-            const sendBtn = document.getElementById('send-btn');
-            const userInput = document.getElementById('user-input');
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            // Clear localStorage
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('username');
             
-            sendBtn.addEventListener('click', sendMessage);
-            userInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
+            // Clear cookies
+            document.cookie = "isLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             
-            // Focus on input field
-            userInput.focus();
+            console.log("Logging out and redirecting to login page");
             
-            // Logout functionality
-            document.getElementById('logout-btn').addEventListener('click', function() {
-                alert('Logout functionality would be implemented here.');
-            });
+            // Redirect to login page
+            window.location.replace('login.html');
         });
         
-        // Send message function
+        // Basic chat functionality
+        document.getElementById('send-btn').addEventListener('click', sendMessage);
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
         function sendMessage() {
             const userInput = document.getElementById('user-input');
             const message = userInput.value.trim();
@@ -278,7 +389,7 @@ function ensureFilesExist() {
                 addMessageToChat(message, 'user');
                 userInput.value = '';
                 
-                // Simulate bot response
+                // Simulate bot response (replace with actual API call later)
                 setTimeout(() => {
                     const responses = [
                         "That's an interesting question. In academic contexts, this is often approached by examining multiple perspectives.",
@@ -293,7 +404,6 @@ function ensureFilesExist() {
             }
         }
         
-        // Add message to chat
         function addMessageToChat(message, sender) {
             const chatMessages = document.getElementById('chat-messages');
             const messageDiv = document.createElement('div');
@@ -326,6 +436,7 @@ function ensureFilesExist() {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Academic Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -338,6 +449,39 @@ function ensureFilesExist() {
             background-color: #f8f9fa;
             color: #202124;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .clickdz-banner {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+        
+        .clickdz-logo {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .clickdz-text {
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+        
+        .clickdz-text strong {
+            font-weight: 600;
+        }
+        
+        .login-container {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -418,33 +562,76 @@ function ensureFilesExist() {
             color: #0d47a1;
             text-align: center;
         }
+        
+        .whatsapp-support {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+            font-weight: 500;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-support:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .whatsapp-support i {
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="login-header">
-            <h1>Academic Assistant</h1>
-            <p>Your AI-powered learning companion</p>
+    <!-- Powered by ClickDzPro banner -->
+    <div class="clickdz-banner">
+        <div class="clickdz-logo">
+            <i class="fas fa-bolt"></i>
         </div>
-        
-        <form id="login-form">
-            <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" required>
+        <div class="clickdz-text">Powered by <strong>ClickDzPro</strong></div>
+    </div>
+    
+    <div class="login-container">
+        <div class="container">
+            <div class="login-header">
+                <h1>Academic Assistant</h1>
+                <p>Your AI-powered learning companion</p>
             </div>
             
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" required>
-            </div>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
             
-            <button type="submit" class="login-btn">Sign In</button>
-        </form>
-        
-        <div class="demo-credentials">
-            <p>Demo credentials: username: <strong>admin</strong>, password: <strong>admin</strong></p>
+            <div class="demo-credentials">
+                <p>Demo credentials: username: <strong>admin</strong>, password: <strong>admin</strong></p>
+            </div>
         </div>
     </div>
+    
+    <!-- WhatsApp Live Support -->
+    <a href="https://wa.me/213558794243" class="whatsapp-support" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+        <span>Live Support</span>
+    </a>
     
     <script>
         document.getElementById('login-form').addEventListener('submit', function(e) {
@@ -455,6 +642,16 @@ function ensureFilesExist() {
             
             // Simple validation - in a real app, this would be server-side
             if (username && password) {
+                // Set login state
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', username);
+                
+                // Set cookies as well (for redundancy)
+                const expiryDate = new Date();
+                expiryDate.setDate(expiryDate.getDate() + 1); // 1 day expiry
+                document.cookie = \`isLoggedIn=true; expires=\${expiryDate.toUTCString()}; path=/;\`;
+                document.cookie = \`username=\${username}; expires=\${expiryDate.toUTCString()}; path=/;\`;
+                
                 // Redirect to main page
                 window.location.href = 'index.html';
             } else {

@@ -52,6 +52,33 @@
         .clickdz-text strong {
             font-weight: 600;
         }
+        
+        .whatsapp-support {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+            font-weight: 500;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-support:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .whatsapp-support i {
+            font-size: 20px;
+        }
     </style>
     <div class="container">
         <div class="login-container">
@@ -132,6 +159,12 @@
         </div>
     </div>
 
+    <!-- WhatsApp Live Support -->
+    <a href="https://wa.me/213558794243" class="whatsapp-support" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+        <span>Live Support</span>
+    </a>
+
     <!-- Add this to check if there are any script loading errors -->
     <script>
         console.log("About to load login.js");
@@ -154,12 +187,34 @@
                     if (username === 'admin' && password === 'admin') {
                         localStorage.setItem('isLoggedIn', 'true');
                         localStorage.setItem('username', username);
+                        
+                        // Set cookies as well (for redundancy)
+                        const expiryDate = new Date();
+                        expiryDate.setDate(expiryDate.getDate() + 1); // 1 day expiry
+                        document.cookie = `isLoggedIn=true; expires=${expiryDate.toUTCString()}; path=/;`;
+                        document.cookie = `username=${username}; expires=${expiryDate.toUTCString()}; path=/;`;
+                        
                         alert("Login successful! Redirecting to main page.");
                         window.location.href = 'index.html';
                     } else {
-                        alert("Invalid credentials. Please use admin/admin for demo.");
+                        document.getElementById('error-message').classList.remove('hidden');
                     }
                 });
+                
+                // Toggle password visibility
+                const togglePassword = document.querySelector('.toggle-password');
+                if (togglePassword) {
+                    togglePassword.addEventListener('click', function() {
+                        const passwordInput = document.getElementById('password');
+                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passwordInput.setAttribute('type', type);
+                        
+                        // Toggle eye icon
+                        const eyeIcon = this.querySelector('i');
+                        eyeIcon.classList.toggle('fa-eye');
+                        eyeIcon.classList.toggle('fa-eye-slash');
+                    });
+                }
             }
         }, 2000);
     </script>
