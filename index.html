@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academic Assistant Chatbot</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         // Check authentication on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -36,6 +37,42 @@
     </style>
 </head>
 <body>
+    <!-- Powered by ClickDzPro banner -->
+    <div class="clickdz-banner">
+        <div class="clickdz-logo">
+            <i class="fas fa-bolt"></i>
+        </div>
+        <div class="clickdz-text">Powered by <strong>ClickDzPro</strong></div>
+    </div>
+    
+    <style>
+        .clickdz-banner {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+        
+        .clickdz-logo {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .clickdz-text {
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+        
+        .clickdz-text strong {
+            font-weight: 600;
+        }
+    </style>
     <div class="chat-container">
         <div class="chat-header">
             <h1>Academic Assistant</h1>
@@ -61,12 +98,18 @@
     <script>
         // Logout functionality
         document.getElementById('logout-btn').addEventListener('click', function() {
+            // Clear localStorage
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('username');
-            // Clear cookies too
+            
+            // Clear cookies
             document.cookie = "isLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-            window.location.href = 'login.html';
+            
+            console.log("Logging out and redirecting to login page");
+            
+            // Redirect to login page
+            window.location.replace('login.html');
         });
         
         // Basic chat functionality
