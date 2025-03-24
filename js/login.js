@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Redirect to main page
                 console.log("Redirecting to index.html");
-                window.location.href = '../index.html';
+                window.location.href = 'index.html';
             } else {
                 console.log("Invalid credentials");
                 // Show error
@@ -121,6 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
 window.addEventListener('error', function(e) {
     console.error('Global error caught:', e.message, 'at', e.filename, ':', e.lineno);
 });
+
 // Add this to your login.js
 function storeLoginState(username) {
     try {
@@ -134,12 +135,4 @@ function storeLoginState(username) {
         document.cookie = "username=" + username + "; path=/; max-age=86400";
         return false;
     }
-}
-
-// And replace the localStorage calls in your login function with:
-if (username === 'admin' && password === 'admin') {
-    console.log("Credentials valid, logging in");
-    storeLoginState(username);
-    console.log("Redirecting to index.html");
-    window.location.href = '../index.html';
 }

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!isLoggedIn) {
         // Redirect to login page if not logged in
-        window.location.href = 'login.html';
+            window.location.href = '../login.html';
         return;
     }
     
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
         logoutBtn.addEventListener('click', function() {
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('username');
-            window.location.href = 'login.html';
+            window.location.href = '../login.html';
         });
     }
 });

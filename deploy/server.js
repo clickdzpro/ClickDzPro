@@ -264,18 +264,7 @@ function ensureFilesExist() {
             
             // Logout functionality
             document.getElementById('logout-btn').addEventListener('click', function() {
-                // Clear localStorage
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('username');
-                
-                // Clear cookies
-                document.cookie = "isLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                
-                console.log("Logging out and redirecting to login page");
-                
-                // Redirect to login page
-                window.location.replace('login.html');
+                alert('Logout functionality would be implemented here.');
             });
         });
         
