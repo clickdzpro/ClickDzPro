@@ -24,3 +24,8 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+const cors = require('cors');
+app.use(cors({
+  origin: ['https://yourusername.github.io', 'http://localhost:3000']
+}));

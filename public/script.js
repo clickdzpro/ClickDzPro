@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Kluster AI API configuration
     const API_KEY = '487ea02a-e01a-4618-8aa5-25d259239765';
-    const BASE_URL = 'https://clickdzpro.onrender.com/api/chat;
+    const BASE_URL = 'https://clickdzpro.onrender.com/api/chat';
     const MODEL = 'klusterai/Meta-Llama-3.1-8B-Instruct-Turbo';
 
     // System prompt for the academic assistant
